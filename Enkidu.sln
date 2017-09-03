@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Enkidu", "Urasandesu.Enkidu\Urasandesu.Enkidu.csproj", "{770E332D-79C4-4184-A220-0C74A73BF1B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.Enkidu", "Test.Urasandesu.Enkidu\Test.Urasandesu.Enkidu.csproj", "{A83725B1-D678-4E25-A06D-84A1FE24A411}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{770E332D-79C4-4184-A220-0C74A73BF1B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{770E332D-79C4-4184-A220-0C74A73BF1B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{770E332D-79C4-4184-A220-0C74A73BF1B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{770E332D-79C4-4184-A220-0C74A73BF1B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E14A8D36-D16B-4419-844B-6F0F744D090D}
+	EndGlobalSection
+EndGlobal
