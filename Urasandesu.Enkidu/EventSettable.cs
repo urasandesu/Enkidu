@@ -33,7 +33,7 @@ using System;
 
 namespace Urasandesu.Enkidu
 {
-    class EventSettable : EventSynchronizable
+    public class EventSettable : EventSynchronizable
     {
         public EventSettable(Predicate<object> willHandle,
             HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null) :

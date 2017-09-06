@@ -30,13 +30,12 @@
 
 
 using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    abstract class EventSynchronizer : IIdentifiableSynchronizer
+    public abstract class EventSynchronizer : IIdentifiableSynchronizer
     {
         readonly Predicate<object> m_willHandle;
         readonly HandledCallback m_begun;
@@ -46,8 +45,12 @@ namespace Urasandesu.Enkidu
         protected EventSynchronizer(SynchronousId id, Predicate<object> willHandle,
             HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null)
         {
-            Debug.Assert(id != null, $"Value cannot be null. Parameter name: { nameof(id) }");
-            Debug.Assert(willHandle != null, $"Value cannot be null. Parameter name: { nameof(willHandle) }");
+            if (id == null)
+                throw new ArgumentNullException(nameof(id));
+
+            if (willHandle == null)
+                throw new ArgumentNullException(nameof(willHandle));
+
             Id = id;
             m_willHandle = willHandle;
             m_begun = begun;

@@ -34,7 +34,7 @@ using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    class EventWaiter : EventSynchronizer
+    public class EventWaiter : EventSynchronizer
     {
         public EventWaiter(SynchronousId id, Predicate<object> willHandle,
             HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null) :

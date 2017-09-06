@@ -30,11 +30,10 @@
 
 
 using System;
-using System.Diagnostics;
 
 namespace Urasandesu.Enkidu
 {
-    abstract class EventSynchronizable : IIdentifiableSynchronizable
+    public abstract class EventSynchronizable : IIdentifiableSynchronizable
     {
         readonly Predicate<object> m_willHandle;
         readonly HandledCallback m_begun;
@@ -44,7 +43,9 @@ namespace Urasandesu.Enkidu
         public EventSynchronizable(Predicate<object> willHandle,
             HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null)
         {
-            Debug.Assert(willHandle != null, $"Value cannot be null. Parameter name: { nameof(willHandle) }");
+            if (willHandle == null)
+                throw new ArgumentNullException(nameof(willHandle));
+
             m_willHandle = willHandle;
             m_begun = begun;
             m_ended = ended;

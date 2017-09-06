@@ -33,7 +33,7 @@ using System;
 
 namespace Urasandesu.Enkidu
 {
-    class EventWaitable : EventSynchronizable
+    public class EventWaitable : EventSynchronizable
     {
         public EventWaitable(Predicate<object> willHandle,
             HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null) :
