@@ -1,0 +1,3 @@
+[submodule "NAnonym"]
+	path = NAnonym
+	url = git@github.com:urasandesu/NAnonym.git

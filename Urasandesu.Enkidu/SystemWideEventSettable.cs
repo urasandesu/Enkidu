@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SynchronizerCallbacks.cs
+ * File: SystemWideEventSettable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,9 +29,21 @@
 
 
 
+using System;
 
 namespace Urasandesu.Enkidu
 {
-    public delegate void HandledCallback(SynchronousId id, object obj, SynchronousOptions opts = null);
-    public delegate void AllNotifiedCallback(SynchronousId id, bool state);
+    public class SystemWideEventSettable : SystemWideEventSynchronizable
+    {
+        public SystemWideEventSettable(string name, Predicate<object> willHandle,
+            HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null) :
+            base(name, willHandle, begun, ended, allNotified)
+        { }
+
+        protected override SystemWideEventSynchronizer GetSystemWideEventSynchronizer(SynchronousId id, string name, Predicate<object> willHandle,
+            HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null)
+        {
+            return new SystemWideEventSetter(id, name, willHandle, begun, ended, allNotified);
+        }
+    }
 }

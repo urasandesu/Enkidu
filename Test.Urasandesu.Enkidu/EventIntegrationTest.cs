@@ -1,5 +1,5 @@
 ﻿/* 
- * File: EnkiduTest.cs
+ * File: EventIntegrationTest.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -39,7 +39,7 @@ using ST = System.Threading;
 namespace Test.Urasandesu.Enkidu
 {
     [TestFixture]
-    public class EnkiduTest
+    public class EventIntegrationTest
     {
         [Test]
         public void Can_restrain_tasks_to_wait_until_ending_process_in_order_of_all_tasks()

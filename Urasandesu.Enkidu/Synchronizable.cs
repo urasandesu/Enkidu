@@ -53,6 +53,24 @@ namespace Urasandesu.Enkidu
             return new EventSettable(willHandle, begun, ended, allNotified);
         }
 
+        public static ISynchronizable SystemWideEventWait(string name, Predicate<object> willHandle,
+            HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null)
+        {
+            if (willHandle == null)
+                throw new ArgumentNullException(nameof(willHandle));
+
+            return new SystemWideEventWaitable(name, willHandle, begun, ended, allNotified);
+        }
+
+        public static ISynchronizable SystemWideEventSet(string name, Predicate<object> willHandle,
+            HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null)
+        {
+            if (willHandle == null)
+                throw new ArgumentNullException(nameof(willHandle));
+
+            return new SystemWideEventSettable(name, willHandle, begun, ended, allNotified);
+        }
+
         public static ISynchronizable Then(this ISynchronizable lhs, ISynchronizable rhs)
         {
             if (lhs == null)

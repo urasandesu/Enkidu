@@ -1,5 +1,5 @@
 ﻿/* 
- * File: SynchronizerCallbacks.cs
+ * File: SystemWideEventWaiter.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,9 +29,40 @@
 
 
 
+using System;
+using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    public delegate void HandledCallback(SynchronousId id, object obj, SynchronousOptions opts = null);
-    public delegate void AllNotifiedCallback(SynchronousId id, bool state);
+    public class SystemWideEventWaiter : SystemWideEventSynchronizer
+    {
+        public SystemWideEventWaiter(SynchronousId id, string name, Predicate<object> willHandle,
+            HandledCallback begun = null, HandledCallback ended = null, AllNotifiedCallback allNotified = null) :
+            base(id, name, willHandle, begun, ended, allNotified)
+        { }
+
+        public override Task Begin(object obj, SynchronousOptions opts = null)
+        {
+            return Task.Run(() =>
+            {
+                if (opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj))
+                {
+                    OnBegun(obj, opts);
+                    WaitHandle.WaitOne();
+                }
+            });
+        }
+
+        public override Task End(object obj, SynchronousOptions opts = null)
+        {
+            return Task.Run(() =>
+            {
+                if (opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj))
+                {
+                    OnEnded(obj, opts);
+                    WaitHandle.Set();
+                }
+            });
+        }
+    }
 }

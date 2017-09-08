@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.Enkidu", "Urasan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.Enkidu", "Test.Urasandesu.Enkidu\Test.Urasandesu.Enkidu.csproj", "{A83725B1-D678-4E25-A06D-84A1FE24A411}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NAnonym", "NAnonym", "{FB050DFE-89D2-4225-BFA0-693CC2DE36EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Urasandesu.NAnonym", "NAnonym\Test.Urasandesu.NAnonym\Test.Urasandesu.NAnonym.csproj", "{885BCF21-BAA1-4179-B679-27C4DC7F14A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Urasandesu.NAnonym", "NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj", "{C04A5E86-30E1-4C38-B916-324D000E240E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +27,21 @@ Global
 		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A83725B1-D678-4E25-A06D-84A1FE24A411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{885BCF21-BAA1-4179-B679-27C4DC7F14A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{885BCF21-BAA1-4179-B679-27C4DC7F14A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{885BCF21-BAA1-4179-B679-27C4DC7F14A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{885BCF21-BAA1-4179-B679-27C4DC7F14A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C04A5E86-30E1-4C38-B916-324D000E240E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04A5E86-30E1-4C38-B916-324D000E240E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C04A5E86-30E1-4C38-B916-324D000E240E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C04A5E86-30E1-4C38-B916-324D000E240E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{885BCF21-BAA1-4179-B679-27C4DC7F14A3} = {FB050DFE-89D2-4225-BFA0-693CC2DE36EB}
+		{C04A5E86-30E1-4C38-B916-324D000E240E} = {FB050DFE-89D2-4225-BFA0-693CC2DE36EB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E14A8D36-D16B-4419-844B-6F0F744D090D}

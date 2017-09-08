@@ -118,13 +118,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EnkiduTest.cs" />
+    <Compile Include="EventIntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemWideEventIntegrationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NAnonym\Urasandesu.NAnonym\Urasandesu.NAnonym.csproj">
+      <Project>{c04a5e86-30e1-4c38-b916-324d000e240e}</Project>
+      <Name>Urasandesu.NAnonym</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Urasandesu.Enkidu\Urasandesu.Enkidu.csproj">
       <Project>{770e332d-79c4-4184-a220-0c74a73bf1b9}</Project>
       <Name>Urasandesu.Enkidu</Name>

@@ -36,6 +36,11 @@ namespace Urasandesu.Enkidu
     [Serializable]
     public class SynchronousId
     {
-        public Guid Value { get; } = new Guid();
+        public Guid Value { get; } = Guid.NewGuid();
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 }
