@@ -71,6 +71,11 @@ namespace Urasandesu.Enkidu
             return new SystemWideEventSettable(name, willHandle, begun, ended, allNotified);
         }
 
+        public static ISynchronizable Empty()
+        {
+            return new EmptySynchronizable();
+        }
+
         public static ISynchronizable Then(this ISynchronizable lhs, ISynchronizable rhs)
         {
             if (lhs == null)
@@ -79,7 +84,14 @@ namespace Urasandesu.Enkidu
             if (rhs == null)
                 throw new ArgumentNullException(nameof(rhs));
 
-            return new ThenSynchronizable(lhs, rhs);
+            if (lhs is EmptySynchronizable && rhs is EmptySynchronizable)
+                return Empty();
+            else if (lhs is EmptySynchronizable)
+                return rhs;
+            else if (rhs is EmptySynchronizable)
+                return lhs;
+            else
+                return new ThenSynchronizable(lhs, rhs);
         }
 
         public static ISynchronizable And(this ISynchronizable lhs, ISynchronizable rhs)
@@ -90,7 +102,14 @@ namespace Urasandesu.Enkidu
             if (rhs == null)
                 throw new ArgumentNullException(nameof(rhs));
 
-            return new AndSynchronizable(lhs, rhs);
+            if (lhs is EmptySynchronizable && rhs is EmptySynchronizable)
+                return Empty();
+            else if (lhs is EmptySynchronizable)
+                return rhs;
+            else if (rhs is EmptySynchronizable)
+                return lhs;
+            else
+                return new AndSynchronizable(lhs, rhs);
         }
 
         public static ISynchronizable Or(this ISynchronizable lhs, ISynchronizable rhs)
@@ -101,7 +120,14 @@ namespace Urasandesu.Enkidu
             if (rhs == null)
                 throw new ArgumentNullException(nameof(rhs));
 
-            return new OrSynchronizable(lhs, rhs);
+            if (lhs is EmptySynchronizable && rhs is EmptySynchronizable)
+                return Empty();
+            else if (lhs is EmptySynchronizable)
+                return rhs;
+            else if (rhs is EmptySynchronizable)
+                return lhs;
+            else
+                return new OrSynchronizable(lhs, rhs);
         }
     }
 }

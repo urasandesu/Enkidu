@@ -208,5 +208,73 @@ namespace Test.Urasandesu.Enkidu
                 sync?.Dispose();
             }
         }
+
+        [Test]
+        public void Should_ignore_empty_when_restraining_tasks()
+        {
+            // Arrange
+            var starts = new ConcurrentBag<int>();
+            var processes = new ConcurrentBag<int>();
+            var empty = Synchronizable.Empty();
+            var setter1 = Synchronizable.EventSet(obj => (int)obj == 1);
+            var setter2 = Synchronizable.EventSet(obj => (int)obj == 2);
+            var waiter3 = Synchronizable.EventWait(obj => (int)obj == 3);
+            var waiter4 = Synchronizable.EventWait(obj => (int)obj == 4);
+
+
+            var sync = default(ISynchronizer);
+            try
+            {
+                // Act
+                sync = setter1.Or(setter2).Or(empty).And(empty.Then(waiter3).Then(empty).Then(waiter4).Then(empty)).And(empty).GetSynchronizer();
+
+                var mre1 = new ST::ManualResetEventSlim(false);
+                var task1 = Task.Run(() =>
+                {
+                    mre1.Wait(10000);
+                    starts.Add(1);
+                    sync.Begin(1).Wait();
+                    processes.Add(1);
+                    sync.End(1).Wait();
+                });
+
+                var task2 = Task.Run(() =>
+                {
+                    starts.Add(2);
+                    sync.Begin(2).Wait();
+                    processes.Add(2);
+                    sync.End(2).Wait();
+                });
+
+                var task3 = Task.Run(() =>
+                {
+                    starts.Add(3);
+                    sync.Begin(3).Wait();
+                    processes.Add(3);
+                    sync.End(3).Wait();
+                });
+
+                var task4 = Task.Run(() =>
+                {
+                    starts.Add(4);
+                    sync.Begin(4).Wait();
+                    processes.Add(4);
+                    sync.End(4).Wait();
+                });
+
+                sync.NotifyAll(false).Wait();
+
+
+                // Assert
+                CollectionAssert.DoesNotContain(starts, 1);
+                CollectionAssert.AreEqual(new[] { 3, 4 }, processes.Intersect(new[] { 3, 4 }));
+                mre1.Set();
+                Task.WaitAll(task1, task2, task3, task4);
+            }
+            finally
+            {
+                sync?.Dispose();
+            }
+        }
     }
 }

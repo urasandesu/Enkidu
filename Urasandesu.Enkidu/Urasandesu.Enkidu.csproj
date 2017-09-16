@@ -44,6 +44,8 @@
     <Compile Include="AndSynchronizer.cs" />
     <Compile Include="BinarySynchronizable.cs" />
     <Compile Include="BinarySynchronizer.cs" />
+    <Compile Include="EmptySynchronizable.cs" />
+    <Compile Include="EmptySynchronizer.cs" />
     <Compile Include="EventSettable.cs" />
     <Compile Include="EventSetter.cs" />
     <Compile Include="EventSynchronizable.cs" />

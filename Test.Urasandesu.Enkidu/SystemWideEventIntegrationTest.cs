@@ -239,5 +239,81 @@ namespace Test.Urasandesu.Enkidu
                 Task.WaitAll(task1, task2, task3, task4);
             });
         }
+
+        [Test]
+        public void Should_ignore_empty_when_restraining_apps()
+        {
+            // Arrange
+            var starts = new ConcurrentBag<int>();
+            var processes = new ConcurrentBag<int>();
+            void Synchronize(Action<ISynchronizer> action)
+            {
+                var empty = Synchronizable.Empty();
+                var setter1 = Synchronizable.SystemWideEventSet("Foo", obj => (int)obj == 1);
+                var setter2 = Synchronizable.SystemWideEventSet("Bar", obj => (int)obj == 2);
+                var waiter3 = Synchronizable.SystemWideEventWait("Baz", obj => (int)obj == 3);
+                var waiter4 = Synchronizable.SystemWideEventWait("Qux", obj => (int)obj == 4);
+                using (var sync = setter1.Or(setter2).Or(empty).And(empty.Then(waiter3).Then(empty).Then(waiter4).Then(empty)).And(empty).GetSynchronizer())
+                    action(sync);
+            }
+
+
+            // Act
+            Synchronize(sync =>
+            {
+                var result_starts = new MarshalByRefAction<int>(i => starts.Add(i));
+                var result_processes = new MarshalByRefAction<int>(i => processes.Add(i));
+                var mre1 = new ST::ManualResetEvent(false);
+                var task1 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_, mre1_) =>
+                Synchronize(sync_ =>
+                {
+                    mre1_.WaitOne(10000);
+                    result_starts_.Invoke(1);
+                    sync_.Begin(1).Wait();
+                    result_processes_.Invoke(1);
+                    sync_.End(1).Wait();
+                }), result_starts, result_processes, mre1));
+
+                var task2 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                Synchronize(sync_ =>
+                {
+                    result_starts_.Invoke(2);
+                    sync_.Begin(2).Wait();
+                    result_processes_.Invoke(2);
+                    sync_.End(2).Wait();
+                }), result_starts, result_processes));
+
+                var task3 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                Synchronize(sync_ =>
+                {
+                    result_starts_.Invoke(3);
+                    sync_.Begin(3).Wait();
+                    result_processes_.Invoke(3);
+                    sync_.End(3).Wait();
+                }), result_starts, result_processes));
+
+                var task4 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                Synchronize(sync_ =>
+                {
+                    result_starts_.Invoke(4);
+                    sync_.Begin(4).Wait();
+                    result_processes_.Invoke(4);
+                    sync_.End(4).Wait();
+                }), result_starts, result_processes));
+
+                sync.NotifyAll(false).Wait();
+
+
+                // Assert
+                CollectionAssert.DoesNotContain(starts, 1);
+                CollectionAssert.AreEqual(new[] { 3, 4 }, processes.Intersect(new[] { 3, 4 }));
+                mre1.Set();
+                Task.WaitAll(task1, task2, task3, task4);
+            });
+        }
     }
 }
