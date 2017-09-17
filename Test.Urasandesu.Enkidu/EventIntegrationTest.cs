@@ -30,6 +30,7 @@
 
 
 using NUnit.Framework;
+using System;
 using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading.Tasks;
@@ -270,6 +271,52 @@ namespace Test.Urasandesu.Enkidu
                 CollectionAssert.AreEqual(new[] { 3, 4 }, processes.Intersect(new[] { 3, 4 }));
                 mre1.Set();
                 Task.WaitAll(task1, task2, task3, task4);
+            }
+            finally
+            {
+                sync?.Dispose();
+            }
+        }
+
+        [Test]
+        public void Can_pause_tasks_by_the_passed_time_span()
+        {
+            // Arrange
+            var processes = new ConcurrentBag<int>();
+            var waiter1 = Synchronizable.EventWait(obj => (int)obj == 1);
+            var waiter2 = Synchronizable.EventWait(obj => (int)obj == 2);
+
+
+            var sync = default(ISynchronizer);
+            try
+            {
+                // Act
+                var task1EndTime = default(DateTimeOffset);
+                var task2StartTime = default(DateTimeOffset);
+                sync = waiter1.Then(waiter2.Pause(TimeSpan.FromMilliseconds(1000))).GetSynchronizer();
+                var task1 = Task.Run(() =>
+                {
+                    sync.Begin(1).Wait();
+                    task1EndTime = DateTimeOffset.Now;
+                    processes.Add(1);
+                    sync.End(1).Wait();
+                });
+
+                var task2 = Task.Run(() =>
+                {
+                    sync.Begin(2).Wait();
+                    task2StartTime = DateTimeOffset.Now;
+                    processes.Add(2);
+                    sync.End(2).Wait();
+                });
+
+                sync.NotifyAll(false).Wait();
+
+
+                // Assert
+                CollectionAssert.AreEqual(new[] { 1, 2 }, processes);
+                Assert.GreaterOrEqual(task2StartTime - task1EndTime, TimeSpan.FromMilliseconds(1000));
+                Task.WaitAll(task1, task2);
             }
             finally
             {

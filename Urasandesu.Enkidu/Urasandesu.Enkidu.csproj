@@ -44,6 +44,8 @@
     <Compile Include="AndSynchronizer.cs" />
     <Compile Include="BinarySynchronizable.cs" />
     <Compile Include="BinarySynchronizer.cs" />
+    <Compile Include="DelaySynchronizable.cs" />
+    <Compile Include="DelaySynchronizer.cs" />
     <Compile Include="EmptySynchronizable.cs" />
     <Compile Include="EmptySynchronizer.cs" />
     <Compile Include="EventSettable.cs" />
@@ -59,6 +61,9 @@
     <Compile Include="ISynchronizer.cs" />
     <Compile Include="OrSynchronizable.cs" />
     <Compile Include="OrSynchronizer.cs" />
+    <Compile Include="PauseSynchronizable.cs" />
+    <Compile Include="PauseSynchronizer.cs" />
+    <Compile Include="Resources.cs" />
     <Compile Include="Synchronizable.cs" />
     <Compile Include="SynchronizerCallbacks.cs" />
     <Compile Include="SynchronousId.cs" />
@@ -72,6 +77,11 @@
     <Compile Include="SystemWideEventWaiter.cs" />
     <Compile Include="ThenSynchronizable.cs" />
     <Compile Include="ThenSynchronizer.cs" />
+    <Compile Include="UnarySynchronizable.cs" />
+    <Compile Include="UnarySynchronizer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

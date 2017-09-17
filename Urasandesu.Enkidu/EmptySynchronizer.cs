@@ -35,8 +35,9 @@ namespace Urasandesu.Enkidu
 {
     class EmptySynchronizer : ISynchronizer
     {
-        public bool WillHandle(object obj) => true;
+        public bool WillBegin(object obj, SynchronousOptions opts = null) => false;
         public Task Begin(object obj, SynchronousOptions opts = null) => Task.CompletedTask;
+        public bool WillEnd(object obj, SynchronousOptions opts = null) => false;
         public Task End(object obj, SynchronousOptions opts = null) => Task.CompletedTask;
         public Task NotifyAll(bool state) => Task.CompletedTask;
         public void Dispose()

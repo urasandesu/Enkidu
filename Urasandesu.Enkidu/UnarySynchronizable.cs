@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ThenSynchronizable.cs
+ * File: UnarySynchronizable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,18 +29,24 @@
 
 
 
+using System;
 
 namespace Urasandesu.Enkidu
 {
-    public class ThenSynchronizable : BinarySynchronizable
+    public abstract class UnarySynchronizable : ISynchronizable
     {
-        public ThenSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
-            base(lhs, rhs)
-        { }
+        readonly ISynchronizable m_operand;
 
-        protected override BinarySynchronizer GetBinarySynchronizer(ISynchronizer lhs, ISynchronizer rhs)
+        protected UnarySynchronizable(ISynchronizable operand)
         {
-            return new ThenSynchronizer(lhs, rhs);
+            m_operand = operand ?? throw new ArgumentNullException(nameof(operand));
         }
+
+        public ISynchronizer GetSynchronizer()
+        {
+            return GetUnarySynchronizer(m_operand.GetSynchronizer());
+        }
+
+        protected abstract UnarySynchronizer GetUnarySynchronizer(ISynchronizer operand);
     }
 }

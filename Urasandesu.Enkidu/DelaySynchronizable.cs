@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ThenSynchronizable.cs
+ * File: DelaySynchronizable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,18 +29,26 @@
 
 
 
+using System;
 
 namespace Urasandesu.Enkidu
 {
-    public class ThenSynchronizable : BinarySynchronizable
+    public class DelaySynchronizable : UnarySynchronizable
     {
-        public ThenSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
-            base(lhs, rhs)
-        { }
+        readonly int m_millisecondsDelay;
 
-        protected override BinarySynchronizer GetBinarySynchronizer(ISynchronizer lhs, ISynchronizer rhs)
+        public DelaySynchronizable(ISynchronizable operand, int millisecondsDelay) :
+            base(operand)
         {
-            return new ThenSynchronizer(lhs, rhs);
+            if (millisecondsDelay < -1)
+                throw new ArgumentOutOfRangeException(nameof(millisecondsDelay), Resources.GetString("Synchronizable_Delay_InvalidMillisecondsDelay"));
+
+            m_millisecondsDelay = millisecondsDelay;
+        }
+
+        protected override UnarySynchronizer GetUnarySynchronizer(ISynchronizer operand)
+        {
+            return new DelaySynchronizer(operand, m_millisecondsDelay);
         }
     }
 }

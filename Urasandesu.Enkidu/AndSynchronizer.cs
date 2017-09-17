@@ -39,14 +39,19 @@ namespace Urasandesu.Enkidu
             base(lhs, rhs)
         { }
 
-        public override bool WillHandle(object obj)
+        public override bool WillBegin(object obj, SynchronousOptions opts = null)
         {
-            return true;
+            return LeftSynchronizer.WillBegin(obj, opts) && RightSynchronizer.WillBegin(obj, opts);
         }
 
         public override Task Begin(object obj, SynchronousOptions opts = null)
         {
             return Task.WhenAll(LeftSynchronizer.Begin(obj, opts), RightSynchronizer.Begin(obj, opts));
+        }
+
+        public override bool WillEnd(object obj, SynchronousOptions opts = null)
+        {
+            return LeftSynchronizer.WillEnd(obj, opts) && RightSynchronizer.WillEnd(obj, opts);
         }
 
         public override Task End(object obj, SynchronousOptions opts = null)

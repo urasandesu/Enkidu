@@ -39,28 +39,45 @@ namespace Urasandesu.Enkidu
             base(lhs, rhs)
         { }
 
-        public override bool WillHandle(object obj)
+        public override bool WillBegin(object obj, SynchronousOptions opts = null)
         {
-            return RightSynchronizer.WillHandle(obj);
+            if (LeftSynchronizer is BinarySynchronizer && LeftSynchronizer.WillBegin(obj, opts))
+                return true;
+            else
+                return RightSynchronizer.WillBegin(obj, opts);
         }
 
         public override async Task Begin(object obj, SynchronousOptions opts = null)
         {
-            if (LeftSynchronizer.WillHandle(obj) && LeftSynchronizer is BinarySynchronizer)
+            if (LeftSynchronizer is BinarySynchronizer && LeftSynchronizer.WillBegin(obj, opts))
                 await LeftSynchronizer.Begin(obj, opts);
             else
                 await RightSynchronizer.Begin(obj, opts);
         }
 
+        public override bool WillEnd(object obj, SynchronousOptions opts = null)
+        {
+            var willLeftBegin = LeftSynchronizer.WillBegin(obj);
+            var willRightBegin = RightSynchronizer.WillBegin(obj);
+            if (willLeftBegin && willRightBegin)
+                return false;
+            else if (willLeftBegin)
+                return RightSynchronizer.WillEnd(obj, SynchronousOptions.UpdateInternalOptions(opts, new InternalSynchronousOptions().WithHandlingCondition()));
+            else if (willRightBegin)
+                return LeftSynchronizer.WillEnd(obj, SynchronousOptions.UpdateInternalOptions(opts, new InternalSynchronousOptions().WithHandlingCondition()));
+            else
+                return LeftSynchronizer.WillEnd(obj, opts);
+        }
+
         public override async Task End(object obj, SynchronousOptions opts = null)
         {
-            var willLeftHandle = LeftSynchronizer.WillHandle(obj);
-            var willRightHandle = RightSynchronizer.WillHandle(obj);
-            if (willLeftHandle && willRightHandle)
+            var willLeftBegin = LeftSynchronizer.WillBegin(obj);
+            var willRightBegin = RightSynchronizer.WillBegin(obj);
+            if (willLeftBegin && willRightBegin)
                 await Task.CompletedTask;
-            else if (willLeftHandle)
+            else if (willLeftBegin)
                 await RightSynchronizer.End(obj, SynchronousOptions.UpdateInternalOptions(opts, new InternalSynchronousOptions().WithHandlingCondition()));
-            else if (willRightHandle)
+            else if (willRightBegin)
                 await LeftSynchronizer.End(obj, SynchronousOptions.UpdateInternalOptions(opts, new InternalSynchronousOptions().WithHandlingCondition()));
             else
                 await LeftSynchronizer.End(obj, opts);

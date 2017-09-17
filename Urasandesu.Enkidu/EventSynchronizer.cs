@@ -37,7 +37,6 @@ namespace Urasandesu.Enkidu
 {
     public abstract class EventSynchronizer : IIdentifiableSynchronizer
     {
-        readonly Predicate<object> m_willHandle;
         readonly HandledCallback m_begun;
         readonly HandledCallback m_ended;
         readonly AllNotifiedCallback m_allNotified;
@@ -52,20 +51,17 @@ namespace Urasandesu.Enkidu
                 throw new ArgumentNullException(nameof(willHandle));
 
             Id = id;
-            m_willHandle = willHandle;
+            WillHandle = willHandle;
             m_begun = begun;
             m_ended = ended;
             m_allNotified = allNotified;
         }
 
-        protected ManualResetEventSlim WaitHandle { get; private set; } = new ManualResetEventSlim(false);
-
         public SynchronousId Id { get; private set; }
+        protected ManualResetEventSlim WaitHandle { get; } = new ManualResetEventSlim(false);
+        protected Predicate<object> WillHandle { get; }
 
-        public bool WillHandle(object obj)
-        {
-            return m_willHandle(obj);
-        }
+        public abstract bool WillBegin(object obj, SynchronousOptions opts = null);
 
         public abstract Task Begin(object obj, SynchronousOptions opts = null);
 
@@ -73,6 +69,8 @@ namespace Urasandesu.Enkidu
         {
             m_begun?.Invoke(Id, obj, opts);
         }
+
+        public abstract bool WillEnd(object obj, SynchronousOptions opts = null);
 
         public abstract Task End(object obj, SynchronousOptions opts = null);
 

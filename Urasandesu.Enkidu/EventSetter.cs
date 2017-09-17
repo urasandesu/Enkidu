@@ -41,16 +41,26 @@ namespace Urasandesu.Enkidu
             base(id, willHandle, begun, ended, allNotified)
         { }
 
+        public override bool WillBegin(object obj, SynchronousOptions opts = null)
+        {
+            return opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj);
+        }
+
         public override Task Begin(object obj, SynchronousOptions opts = null)
         {
             return Task.Run(() =>
             {
-                if (opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj))
+                if (WillBegin(obj, opts))
                 {
                     OnBegun(obj, opts);
                     WaitHandle.Set();
                 }
             });
+        }
+
+        public override bool WillEnd(object obj, SynchronousOptions opts = null)
+        {
+            return false;
         }
 
         public override Task End(object obj, SynchronousOptions opts = null)

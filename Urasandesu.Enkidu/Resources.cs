@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ThenSynchronizable.cs
+ * File: Synchronizable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,18 +29,33 @@
 
 
 
+using System.Globalization;
+using System.Resources;
 
 namespace Urasandesu.Enkidu
 {
-    public class ThenSynchronizable : BinarySynchronizable
+    class Resources
     {
-        public ThenSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
-            base(lhs, rhs)
+        static ResourceManager m_resourceManager;
+
+        public Resources()
         { }
 
-        protected override BinarySynchronizer GetBinarySynchronizer(ISynchronizer lhs, ISynchronizer rhs)
+        public static ResourceManager ResourceManager
         {
-            return new ThenSynchronizer(lhs, rhs);
+            get
+            {
+                if (ReferenceEquals(m_resourceManager, null))
+                    m_resourceManager = new ResourceManager("Urasandesu.Enkidu.Resources", typeof(Resources).Assembly);
+                return m_resourceManager;
+            }
+        }
+
+        public static CultureInfo Culture { get; set; }
+
+        public static string GetString(string name)
+        {
+            return ResourceManager.GetString(name, Culture);
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ThenSynchronizable.cs
+ * File: PauseSynchronizable.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,18 +29,26 @@
 
 
 
+using System;
 
 namespace Urasandesu.Enkidu
 {
-    public class ThenSynchronizable : BinarySynchronizable
+    public class PauseSynchronizable : UnarySynchronizable
     {
-        public ThenSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
-            base(lhs, rhs)
-        { }
+        readonly int m_millisecondsPause;
 
-        protected override BinarySynchronizer GetBinarySynchronizer(ISynchronizer lhs, ISynchronizer rhs)
+        public PauseSynchronizable(ISynchronizable operand, int millisecondsPause) :
+            base(operand)
         {
-            return new ThenSynchronizer(lhs, rhs);
+            if (millisecondsPause < -1)
+                throw new ArgumentOutOfRangeException(nameof(millisecondsPause), Resources.GetString("Synchronizable_Pause_InvalidMillisecondsPause"));
+
+            m_millisecondsPause = millisecondsPause;
+        }
+
+        protected override UnarySynchronizer GetUnarySynchronizer(ISynchronizer operand)
+        {
+            return new PauseSynchronizer(operand, m_millisecondsPause);
         }
     }
 }

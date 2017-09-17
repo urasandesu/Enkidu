@@ -1,5 +1,5 @@
 ﻿/* 
- * File: ThenSynchronizable.cs
+ * File: UnarySynchronizer.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,18 +29,48 @@
 
 
 
+using System;
+using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    public class ThenSynchronizable : BinarySynchronizable
+    public abstract class UnarySynchronizer : ISynchronizer
     {
-        public ThenSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
-            base(lhs, rhs)
-        { }
-
-        protected override BinarySynchronizer GetBinarySynchronizer(ISynchronizer lhs, ISynchronizer rhs)
+        protected UnarySynchronizer(ISynchronizer operand)
         {
-            return new ThenSynchronizer(lhs, rhs);
+            OperandSynchronizer = operand ?? throw new ArgumentNullException(nameof(operand));
+        }
+
+        protected ISynchronizer OperandSynchronizer { get; private set; }
+
+        public abstract bool WillBegin(object obj, SynchronousOptions opts = null);
+
+        public abstract Task Begin(object obj, SynchronousOptions opts = null);
+
+        public abstract bool WillEnd(object obj, SynchronousOptions opts = null);
+
+        public abstract Task End(object obj, SynchronousOptions opts = null);
+
+        public abstract Task NotifyAll(bool state);
+
+        bool m_disposed;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!m_disposed)
+            {
+                if (disposing)
+                {
+                    OperandSynchronizer.Dispose();
+                }
+
+                m_disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

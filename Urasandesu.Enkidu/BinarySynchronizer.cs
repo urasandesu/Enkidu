@@ -45,9 +45,11 @@ namespace Urasandesu.Enkidu
         protected ISynchronizer LeftSynchronizer { get; private set; }
         protected ISynchronizer RightSynchronizer { get; private set; }
 
-        public abstract bool WillHandle(object obj);
+        public abstract bool WillBegin(object obj, SynchronousOptions opts = null);
 
         public abstract Task Begin(object obj, SynchronousOptions opts = null);
+
+        public abstract bool WillEnd(object obj, SynchronousOptions opts = null);
 
         public abstract Task End(object obj, SynchronousOptions opts = null);
 

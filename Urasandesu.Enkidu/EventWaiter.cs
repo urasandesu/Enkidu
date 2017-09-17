@@ -41,11 +41,16 @@ namespace Urasandesu.Enkidu
             base(id, willHandle, begun, ended, allNotified)
         { }
 
+        public override bool WillBegin(object obj, SynchronousOptions opts = null)
+        {
+            return opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj);
+        }
+
         public override Task Begin(object obj, SynchronousOptions opts = null)
         {
             return Task.Run(() =>
             {
-                if (opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj))
+                if (WillBegin(obj, opts))
                 {
                     OnBegun(obj, opts);
                     WaitHandle.Wait();
@@ -53,11 +58,16 @@ namespace Urasandesu.Enkidu
             });
         }
 
+        public override bool WillEnd(object obj, SynchronousOptions opts = null)
+        {
+            return opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj);
+        }
+
         public override Task End(object obj, SynchronousOptions opts = null)
         {
             return Task.Run(() =>
             {
-                if (opts?.InternalOptions?.IgnoresHandlingCondition == true || WillHandle(obj))
+                if (WillEnd(obj, opts))
                 {
                     OnEnded(obj, opts);
                     WaitHandle.Set();

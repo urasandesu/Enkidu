@@ -36,8 +36,9 @@ namespace Urasandesu.Enkidu
 {
     public interface ISynchronizer : IDisposable
     {
-        bool WillHandle(object obj);
+        bool WillBegin(object obj, SynchronousOptions opts = null);
         Task Begin(object obj, SynchronousOptions opts = null);
+        bool WillEnd(object obj, SynchronousOptions opts = null);
         Task End(object obj, SynchronousOptions opts = null);
         Task NotifyAll(bool state);
     }

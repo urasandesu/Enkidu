@@ -49,6 +49,7 @@ namespace Test.Urasandesu.Enkidu
         {
             // Arrange
             var processes = new ConcurrentBag<int>();
+            var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
                 var begun = new HandledCallback((id, obj, opts) =>
@@ -72,33 +73,32 @@ namespace Test.Urasandesu.Enkidu
             // Act
             Synchronize(sync =>
             {
-                var result_processes = new MarshalByRefAction<int>(i => processes.Add(i));
                 var task1 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain(result_processes_ =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain(processes_Add_ =>
                 Synchronize(sync_ =>
                 {
                     sync_.Begin(1).Wait();
-                    result_processes_.Invoke(1);
+                    processes_Add_.Invoke(1);
                     sync_.End(1).Wait();
-                }), result_processes));
+                }), processes_Add));
 
                 var task2 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain(result_processes_ =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain(processes_Add_ =>
                 Synchronize(sync_ =>
                 {
                     sync_.Begin(2).Wait();
-                    result_processes_.Invoke(2);
+                    processes_Add_.Invoke(2);
                     sync_.End(2).Wait();
-                }), result_processes));
+                }), processes_Add));
 
                 var task3 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain(result_processes_ =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain(processes_Add_ =>
                 Synchronize(sync_ =>
                 {
                     sync_.Begin(3).Wait();
-                    result_processes_.Invoke(3);
+                    processes_Add_.Invoke(3);
                     sync_.End(3).Wait();
-                }), result_processes));
+                }), processes_Add));
 
                 sync.NotifyAll(false).Wait();
 
@@ -114,7 +114,9 @@ namespace Test.Urasandesu.Enkidu
         {
             // Arrange
             var starts = new ConcurrentBag<int>();
+            var starts_Add = new MarshalByRefAction<int>(i => starts.Add(i));
             var processes = new ConcurrentBag<int>();
+            var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
                 var setter1 = Synchronizable.SystemWideEventSet("Foo", obj => (int)obj == 1);
@@ -127,31 +129,29 @@ namespace Test.Urasandesu.Enkidu
             // Act
             Synchronize(sync =>
             {
-                var result_starts = new MarshalByRefAction<int>(i => starts.Add(i));
-                var result_processes = new MarshalByRefAction<int>(i => processes.Add(i));
                 var mre1 = new ST::ManualResetEvent(false);
                 var task1 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_, mre1_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_, mre1_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(1);
+                    starts_Add_.Invoke(1);
                     sync_.Begin(1).Wait();
                     mre1_.WaitOne(10000);
-                    result_processes_.Invoke(1);
+                    processes_Add_.Invoke(1);
                     sync_.End(1).Wait();
-                }), result_starts, result_processes, mre1));
+                }), starts_Add, processes_Add, mre1));
 
                 var mre2 = new ST::ManualResetEvent(false);
                 var task2 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_, mre2_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_, mre2_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(2);
+                    starts_Add_.Invoke(2);
                     sync_.Begin(2).Wait();
                     mre2_.WaitOne(10000);
-                    result_processes_.Invoke(2);
+                    processes_Add_.Invoke(2);
                     sync_.End(2).Wait();
-                }), result_starts, result_processes, mre2));
+                }), starts_Add, processes_Add, mre2));
 
                 sync.NotifyAll(false).Wait();
 
@@ -170,7 +170,9 @@ namespace Test.Urasandesu.Enkidu
         {
             // Arrange
             var starts = new ConcurrentBag<int>();
+            var starts_Add = new MarshalByRefAction<int>(i => starts.Add(i));
             var processes = new ConcurrentBag<int>();
+            var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
                 var setter1 = Synchronizable.SystemWideEventSet("Foo", obj => (int)obj == 1);
@@ -185,49 +187,47 @@ namespace Test.Urasandesu.Enkidu
             // Act
             Synchronize(sync =>
             {
-                var result_starts = new MarshalByRefAction<int>(i => starts.Add(i));
-                var result_processes = new MarshalByRefAction<int>(i => processes.Add(i));
                 var mre1 = new ST::ManualResetEvent(false);
                 var task1 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_, mre1_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_, mre1_) =>
                 Synchronize(sync_ =>
                 {
                     mre1_.WaitOne(10000);
-                    result_starts_.Invoke(1);
+                    starts_Add_.Invoke(1);
                     sync_.Begin(1).Wait();
-                    result_processes_.Invoke(1);
+                    processes_Add_.Invoke(1);
                     sync_.End(1).Wait();
-                }), result_starts, result_processes, mre1));
+                }), starts_Add, processes_Add, mre1));
 
                 var task2 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(2);
+                    starts_Add_.Invoke(2);
                     sync_.Begin(2).Wait();
-                    result_processes_.Invoke(2);
+                    processes_Add_.Invoke(2);
                     sync_.End(2).Wait();
-                }), result_starts, result_processes));
+                }), starts_Add, processes_Add));
 
                 var task3 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(3);
+                    starts_Add_.Invoke(3);
                     sync_.Begin(3).Wait();
-                    result_processes_.Invoke(3);
+                    processes_Add_.Invoke(3);
                     sync_.End(3).Wait();
-                }), result_starts, result_processes));
+                }), starts_Add, processes_Add));
 
                 var task4 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(4);
+                    starts_Add_.Invoke(4);
                     sync_.Begin(4).Wait();
-                    result_processes_.Invoke(4);
+                    processes_Add_.Invoke(4);
                     sync_.End(4).Wait();
-                }), result_starts, result_processes));
+                }), starts_Add, processes_Add));
 
                 sync.NotifyAll(false).Wait();
 
@@ -245,7 +245,9 @@ namespace Test.Urasandesu.Enkidu
         {
             // Arrange
             var starts = new ConcurrentBag<int>();
+            var starts_Add = new MarshalByRefAction<int>(i => starts.Add(i));
             var processes = new ConcurrentBag<int>();
+            var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
                 var empty = Synchronizable.Empty();
@@ -261,49 +263,47 @@ namespace Test.Urasandesu.Enkidu
             // Act
             Synchronize(sync =>
             {
-                var result_starts = new MarshalByRefAction<int>(i => starts.Add(i));
-                var result_processes = new MarshalByRefAction<int>(i => processes.Add(i));
                 var mre1 = new ST::ManualResetEvent(false);
                 var task1 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_, mre1_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_, mre1_) =>
                 Synchronize(sync_ =>
                 {
                     mre1_.WaitOne(10000);
-                    result_starts_.Invoke(1);
+                    starts_Add_.Invoke(1);
                     sync_.Begin(1).Wait();
-                    result_processes_.Invoke(1);
+                    processes_Add_.Invoke(1);
                     sync_.End(1).Wait();
-                }), result_starts, result_processes, mre1));
+                }), starts_Add, processes_Add, mre1));
 
                 var task2 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(2);
+                    starts_Add_.Invoke(2);
                     sync_.Begin(2).Wait();
-                    result_processes_.Invoke(2);
+                    processes_Add_.Invoke(2);
                     sync_.End(2).Wait();
-                }), result_starts, result_processes));
+                }), starts_Add, processes_Add));
 
                 var task3 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(3);
+                    starts_Add_.Invoke(3);
                     sync_.Begin(3).Wait();
-                    result_processes_.Invoke(3);
+                    processes_Add_.Invoke(3);
                     sync_.End(3).Wait();
-                }), result_starts, result_processes));
+                }), starts_Add, processes_Add));
 
                 var task4 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((result_starts_, result_processes_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((starts_Add_, processes_Add_) =>
                 Synchronize(sync_ =>
                 {
-                    result_starts_.Invoke(4);
+                    starts_Add_.Invoke(4);
                     sync_.Begin(4).Wait();
-                    result_processes_.Invoke(4);
+                    processes_Add_.Invoke(4);
                     sync_.End(4).Wait();
-                }), result_starts, result_processes));
+                }), starts_Add, processes_Add));
 
                 sync.NotifyAll(false).Wait();
 
@@ -313,6 +313,58 @@ namespace Test.Urasandesu.Enkidu
                 CollectionAssert.AreEqual(new[] { 3, 4 }, processes.Intersect(new[] { 3, 4 }));
                 mre1.Set();
                 Task.WaitAll(task1, task2, task3, task4);
+            });
+        }
+
+        [Test]
+        public void Can_pause_apps_by_the_passed_time_span()
+        {
+            // Arrange
+            var task1EndTime = default(DateTimeOffset);
+            var task1EndTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task1EndTime = dt);
+            var task2StartTime = default(DateTimeOffset);
+            var task2StartTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task2StartTime = dt);
+            var processes = new ConcurrentBag<int>();
+            var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
+            void Synchronize(Action<ISynchronizer> action)
+            {
+                var waiter1 = Synchronizable.SystemWideEventWait("Foo", obj => (int)obj == 1);
+                var waiter2 = Synchronizable.SystemWideEventWait("Bar", obj => (int)obj == 2);
+                using (var sync = waiter1.Then(waiter2.Pause(TimeSpan.FromMilliseconds(1000))).GetSynchronizer())
+                    action(sync);
+            }
+
+
+            // Act
+            Synchronize(sync =>
+            {
+                var task1 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((task1EndTime_Assign_, processes_Add_) =>
+                Synchronize(sync_ =>
+                {
+                    sync_.Begin(1).Wait();
+                    task1EndTime_Assign_.Invoke(DateTimeOffset.Now);
+                    processes_Add_.Invoke(1);
+                    sync_.End(1).Wait();
+                }), task1EndTime_Assign, processes_Add));
+
+                var task2 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((task2StartTime_Assign_, processes_Add_) =>
+                Synchronize(sync_ =>
+                {
+                    sync_.Begin(2).Wait();
+                    task2StartTime_Assign_.Invoke(DateTimeOffset.Now);
+                    processes_Add_.Invoke(2);
+                    sync_.End(2).Wait();
+                }), task2StartTime_Assign, processes_Add));
+
+                sync.NotifyAll(false).Wait();
+
+
+                // Assert
+                CollectionAssert.AreEqual(new[] { 1, 2 }, processes);
+                Assert.GreaterOrEqual(task2StartTime - task1EndTime, TimeSpan.FromMilliseconds(1000));
+                Task.WaitAll(task1, task2);
             });
         }
     }

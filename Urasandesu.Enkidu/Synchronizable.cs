@@ -76,6 +76,52 @@ namespace Urasandesu.Enkidu
             return new EmptySynchronizable();
         }
 
+        public static ISynchronizable Delay(this ISynchronizable source, TimeSpan delay)
+        {
+            var totalMilliseconds = (long)delay.TotalMilliseconds;
+            if (totalMilliseconds < -1 || int.MaxValue < totalMilliseconds)
+                throw new ArgumentOutOfRangeException(nameof(delay), Resources.GetString("Synchronizable_Delay_InvalidDelay"));
+            
+            return source.Delay((int)totalMilliseconds);
+        }
+
+        public static ISynchronizable Delay(this ISynchronizable source, int millisecondsDelay)
+        {
+            if (millisecondsDelay < -1)
+                throw new ArgumentOutOfRangeException(nameof(millisecondsDelay), Resources.GetString("Synchronizable_Delay_InvalidMillisecondsDelay"));
+
+            if (millisecondsDelay == 0)
+                return Empty();
+
+            else if (source is EmptySynchronizable)
+                return source;
+            else
+                return new DelaySynchronizable(source, millisecondsDelay);
+        }
+
+        public static ISynchronizable Pause(this ISynchronizable source, TimeSpan delay)
+        {
+            var totalMilliseconds = (long)delay.TotalMilliseconds;
+            if (totalMilliseconds < -1 || int.MaxValue < totalMilliseconds)
+                throw new ArgumentOutOfRangeException(nameof(delay), Resources.GetString("Synchronizable_Pause_InvalidPause"));
+
+            return source.Pause((int)totalMilliseconds);
+        }
+
+        public static ISynchronizable Pause(this ISynchronizable source, int millisecondsPause)
+        {
+            if (millisecondsPause < -1)
+                throw new ArgumentOutOfRangeException(nameof(millisecondsPause), Resources.GetString("Synchronizable_Pause_InvalidMillisecondsPause"));
+
+            if (millisecondsPause == 0)
+                return Empty();
+
+            else if (source is EmptySynchronizable)
+                return source;
+            else
+                return new PauseSynchronizable(source, millisecondsPause);
+        }
+
         public static ISynchronizable Then(this ISynchronizable lhs, ISynchronizable rhs)
         {
             if (lhs == null)

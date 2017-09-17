@@ -1,5 +1,5 @@
 ﻿/* 
- * File: OrSynchronizer.cs
+ * File: DelaySynchronizer.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -29,39 +29,55 @@
 
 
 
+using System;
 using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    public class OrSynchronizer : BinarySynchronizer
+    public class DelaySynchronizer : UnarySynchronizer
     {
-        public OrSynchronizer(ISynchronizer lhs, ISynchronizer rhs) :
-            base(lhs, rhs)
-        { }
+        readonly int m_millisecondsDelay;
+
+        public DelaySynchronizer(ISynchronizer operand, int millisecondsDelay) :
+            base(operand)
+        {
+            if (millisecondsDelay < -1)
+                throw new ArgumentOutOfRangeException(nameof(millisecondsDelay), Resources.GetString("Synchronizable_Delay_InvalidMillisecondsDelay"));
+
+            m_millisecondsDelay = millisecondsDelay;
+        }
 
         public override bool WillBegin(object obj, SynchronousOptions opts = null)
         {
-            return LeftSynchronizer.WillBegin(obj, opts) || RightSynchronizer.WillBegin(obj, opts);
+            return opts?.InternalOptions?.IgnoresHandlingCondition == true || OperandSynchronizer.WillBegin(obj, opts);
         }
 
-        public override Task Begin(object obj, SynchronousOptions opts = null)
+        public override async Task Begin(object obj, SynchronousOptions opts = null)
         {
-            return Task.WhenAny(LeftSynchronizer.Begin(obj, opts), RightSynchronizer.Begin(obj, opts));
+            if (WillBegin(obj, opts))
+            {
+                await Task.Delay(m_millisecondsDelay);
+                await OperandSynchronizer.Begin(obj, opts);
+            }
         }
 
         public override bool WillEnd(object obj, SynchronousOptions opts = null)
         {
-            return LeftSynchronizer.WillEnd(obj, opts) || RightSynchronizer.WillEnd(obj, opts);
+            return opts?.InternalOptions?.IgnoresHandlingCondition == true || OperandSynchronizer.WillEnd(obj, opts);
         }
 
-        public override Task End(object obj, SynchronousOptions opts = null)
+        public override async Task End(object obj, SynchronousOptions opts = null)
         {
-            return Task.WhenAny(LeftSynchronizer.End(obj, opts), RightSynchronizer.End(obj, opts));
+            if (opts?.InternalOptions?.IgnoresHandlingCondition == true || WillEnd(obj))
+            {
+                await Task.Delay(m_millisecondsDelay);
+                await OperandSynchronizer.End(obj, opts);
+            }
         }
 
         public override Task NotifyAll(bool state)
         {
-            return Task.WhenAny(LeftSynchronizer.NotifyAll(state), RightSynchronizer.NotifyAll(state));
+            return OperandSynchronizer.NotifyAll(state);
         }
     }
 }
