@@ -29,21 +29,19 @@
 
 
 
-using System.Diagnostics;
+using System;
 
 namespace Urasandesu.Enkidu
 {
-    abstract class BinarySynchronizable : ISynchronizable
+    public abstract class BinarySynchronizable : ISynchronizable
     {
         readonly ISynchronizable m_lhs;
         readonly ISynchronizable m_rhs;
 
         protected BinarySynchronizable(ISynchronizable lhs, ISynchronizable rhs)
         {
-            Debug.Assert(lhs != null, $"Value cannot be null. Parameter name: { nameof(lhs) }");
-            Debug.Assert(rhs != null, $"Value cannot be null. Parameter name: { nameof(rhs) }");
-            m_lhs = lhs;
-            m_rhs = rhs;
+            m_lhs = lhs ?? throw new ArgumentNullException(nameof(lhs));
+            m_rhs = rhs ?? throw new ArgumentNullException(nameof(rhs));
         }
 
         public ISynchronizer GetSynchronizer()

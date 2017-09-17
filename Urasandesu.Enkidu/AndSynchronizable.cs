@@ -31,7 +31,7 @@
 
 namespace Urasandesu.Enkidu
 {
-    class AndSynchronizable : BinarySynchronizable
+    public class AndSynchronizable : BinarySynchronizable
     {
         public AndSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
             base(lhs, rhs)

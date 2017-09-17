@@ -31,7 +31,7 @@
 
 namespace Urasandesu.Enkidu
 {
-    class ThenSynchronizable : BinarySynchronizable
+    public class ThenSynchronizable : BinarySynchronizable
     {
         public ThenSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
             base(lhs, rhs)

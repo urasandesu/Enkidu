@@ -29,19 +29,17 @@
 
 
 
-using System.Diagnostics;
+using System;
 using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    abstract class BinarySynchronizer : ISynchronizer
+    public abstract class BinarySynchronizer : ISynchronizer
     {
         protected BinarySynchronizer(ISynchronizer lhs, ISynchronizer rhs)
         {
-            Debug.Assert(lhs != null, $"Value cannot be null. Parameter name: { nameof(lhs) }");
-            Debug.Assert(rhs != null, $"Value cannot be null. Parameter name: { nameof(rhs) }");
-            LeftSynchronizer = lhs;
-            RightSynchronizer = rhs;
+            LeftSynchronizer = lhs ?? throw new ArgumentNullException(nameof(lhs));
+            RightSynchronizer = rhs ?? throw new ArgumentNullException(nameof(rhs));
         }
 
         protected ISynchronizer LeftSynchronizer { get; private set; }

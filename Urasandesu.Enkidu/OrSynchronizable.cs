@@ -31,7 +31,7 @@
 
 namespace Urasandesu.Enkidu
 {
-    class OrSynchronizable : BinarySynchronizable
+    public class OrSynchronizable : BinarySynchronizable
     {
         public OrSynchronizable(ISynchronizable lhs, ISynchronizable rhs) :
             base(lhs, rhs)

@@ -33,7 +33,7 @@ using System.Threading.Tasks;
 
 namespace Urasandesu.Enkidu
 {
-    class OrSynchronizer : BinarySynchronizer
+    public class OrSynchronizer : BinarySynchronizer
     {
         public OrSynchronizer(ISynchronizer lhs, ISynchronizer rhs) :
             base(lhs, rhs)
