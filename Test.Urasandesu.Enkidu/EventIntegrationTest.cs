@@ -282,7 +282,8 @@ namespace Test.Urasandesu.Enkidu
         public void Can_pause_tasks_by_the_passed_time_span()
         {
             // Arrange
-            var processes = new ConcurrentBag<int>();
+            var task1EndTime = default(DateTimeOffset);
+            var task2BegunTime = default(DateTimeOffset);
             var waiter1 = Synchronizable.EventWait(obj => (int)obj == 1);
             var waiter2 = Synchronizable.EventWait(obj => (int)obj == 2);
 
@@ -291,22 +292,18 @@ namespace Test.Urasandesu.Enkidu
             try
             {
                 // Act
-                var task1EndTime = default(DateTimeOffset);
-                var task2StartTime = default(DateTimeOffset);
                 sync = waiter1.Then(waiter2.Pause(TimeSpan.FromMilliseconds(1000))).GetSynchronizer();
                 var task1 = Task.Run(() =>
                 {
                     sync.Begin(1).Wait();
                     task1EndTime = DateTimeOffset.Now;
-                    processes.Add(1);
                     sync.End(1).Wait();
                 });
 
                 var task2 = Task.Run(() =>
                 {
                     sync.Begin(2).Wait();
-                    task2StartTime = DateTimeOffset.Now;
-                    processes.Add(2);
+                    task2BegunTime = DateTimeOffset.Now;
                     sync.End(2).Wait();
                 });
 
@@ -314,8 +311,56 @@ namespace Test.Urasandesu.Enkidu
 
 
                 // Assert
-                CollectionAssert.AreEqual(new[] { 1, 2 }, processes);
-                Assert.GreaterOrEqual(task2StartTime - task1EndTime, TimeSpan.FromMilliseconds(1000));
+                Assert.GreaterOrEqual(task2BegunTime - task1EndTime, TimeSpan.FromMilliseconds(1000));
+                Task.WaitAll(task1, task2);
+            }
+            finally
+            {
+                sync?.Dispose();
+            }
+        }
+
+        [Test]
+        public void Can_delay_tasks_by_the_passed_time_span()
+        {
+            // Arrange
+            var task1BeginTime = default(DateTimeOffset);
+            var task2BegunTime = default(DateTimeOffset);
+            var setter1 = Synchronizable.EventSet(obj => (int)obj == 1);
+            var setter2 = Synchronizable.EventSet(obj => (int)obj == 2);
+
+
+            var sync = default(ISynchronizer);
+            try
+            {
+                // Act
+                sync = setter1.And(setter2.Delay(TimeSpan.FromMilliseconds(1000))).GetSynchronizer();
+
+                var mre1 = new ST::ManualResetEventSlim(false);
+                var task1 = Task.Run(() =>
+                {
+                    task1BeginTime = DateTimeOffset.Now;
+                    sync.Begin(1).Wait();
+                    mre1.Set();
+                    sync.End(1).Wait();
+                });
+
+                var mre2 = new ST::ManualResetEventSlim(false);
+                var task2 = Task.Run(() =>
+                {
+                    sync.Begin(2).Wait();
+                    task2BegunTime = DateTimeOffset.Now;
+                    mre2.Set();
+                    sync.End(2).Wait();
+                });
+
+                sync.NotifyAll(false).Wait();
+
+
+                // Assert
+                mre1.Wait();
+                mre2.Wait();
+                Assert.GreaterOrEqual(task2BegunTime - task1BeginTime, TimeSpan.FromMilliseconds(1000));
                 Task.WaitAll(task1, task2);
             }
             finally

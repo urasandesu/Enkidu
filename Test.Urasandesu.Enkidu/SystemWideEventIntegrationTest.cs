@@ -34,6 +34,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Urasandesu.Enkidu;
 using Urasandesu.NAnonym.Mixins.System;
@@ -62,9 +63,10 @@ namespace Test.Urasandesu.Enkidu
                     var threadId = ST::Thread.CurrentThread.ManagedThreadId;
                     Debug.WriteLine($"Ended Id: { id }, Obj: { obj }, Thread: { threadId }");
                 });
-                var waiter1 = Synchronizable.SystemWideEventWait("Foo", obj => (int)obj == 1, begun, ended);
-                var waiter2 = Synchronizable.SystemWideEventWait("Bar", obj => (int)obj == 2, begun, ended);
-                var waiter3 = Synchronizable.SystemWideEventWait("Baz", obj => (int)obj == 3, begun, ended);
+                var curMeth = MethodBase.GetCurrentMethod();
+                var waiter1 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Foo"), obj => (int)obj == 1, begun, ended);
+                var waiter2 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Bar"), obj => (int)obj == 2, begun, ended);
+                var waiter3 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Baz"), obj => (int)obj == 3, begun, ended);
                 using (var sync = waiter1.Then(waiter2).Then(waiter3).GetSynchronizer())
                     action(sync);
             }
@@ -119,8 +121,9 @@ namespace Test.Urasandesu.Enkidu
             var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
-                var setter1 = Synchronizable.SystemWideEventSet("Foo", obj => (int)obj == 1);
-                var setter2 = Synchronizable.SystemWideEventSet("Bar", obj => (int)obj == 2);
+                var curMeth = MethodBase.GetCurrentMethod();
+                var setter1 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Foo"), obj => (int)obj == 1);
+                var setter2 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Bar"), obj => (int)obj == 2);
                 using (var sync = setter1.And(setter2).GetSynchronizer())
                     action(sync);
             }
@@ -175,10 +178,11 @@ namespace Test.Urasandesu.Enkidu
             var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
-                var setter1 = Synchronizable.SystemWideEventSet("Foo", obj => (int)obj == 1);
-                var setter2 = Synchronizable.SystemWideEventSet("Bar", obj => (int)obj == 2);
-                var waiter3 = Synchronizable.SystemWideEventWait("Baz", obj => (int)obj == 3);
-                var waiter4 = Synchronizable.SystemWideEventWait("Qux", obj => (int)obj == 4);
+                var curMeth = MethodBase.GetCurrentMethod();
+                var setter1 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Foo"), obj => (int)obj == 1);
+                var setter2 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Bar"), obj => (int)obj == 2);
+                var waiter3 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Baz"), obj => (int)obj == 3);
+                var waiter4 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Qux"), obj => (int)obj == 4);
                 using (var sync = setter1.Or(setter2).And(waiter3.Then(waiter4)).GetSynchronizer())
                     action(sync);
             }
@@ -250,11 +254,12 @@ namespace Test.Urasandesu.Enkidu
             var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
             void Synchronize(Action<ISynchronizer> action)
             {
+                var curMeth = MethodBase.GetCurrentMethod();
                 var empty = Synchronizable.Empty();
-                var setter1 = Synchronizable.SystemWideEventSet("Foo", obj => (int)obj == 1);
-                var setter2 = Synchronizable.SystemWideEventSet("Bar", obj => (int)obj == 2);
-                var waiter3 = Synchronizable.SystemWideEventWait("Baz", obj => (int)obj == 3);
-                var waiter4 = Synchronizable.SystemWideEventWait("Qux", obj => (int)obj == 4);
+                var setter1 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Foo"), obj => (int)obj == 1);
+                var setter2 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Bar"), obj => (int)obj == 2);
+                var waiter3 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Baz"), obj => (int)obj == 3);
+                var waiter4 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Qux"), obj => (int)obj == 4);
                 using (var sync = setter1.Or(setter2).Or(empty).And(empty.Then(waiter3).Then(empty).Then(waiter4).Then(empty)).And(empty).GetSynchronizer())
                     action(sync);
             }
@@ -322,14 +327,13 @@ namespace Test.Urasandesu.Enkidu
             // Arrange
             var task1EndTime = default(DateTimeOffset);
             var task1EndTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task1EndTime = dt);
-            var task2StartTime = default(DateTimeOffset);
-            var task2StartTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task2StartTime = dt);
-            var processes = new ConcurrentBag<int>();
-            var processes_Add = new MarshalByRefAction<int>(i => processes.Add(i));
+            var task2BegunTime = default(DateTimeOffset);
+            var task2BegunTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task2BegunTime = dt);
             void Synchronize(Action<ISynchronizer> action)
             {
-                var waiter1 = Synchronizable.SystemWideEventWait("Foo", obj => (int)obj == 1);
-                var waiter2 = Synchronizable.SystemWideEventWait("Bar", obj => (int)obj == 2);
+                var curMeth = MethodBase.GetCurrentMethod();
+                var waiter1 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Foo"), obj => (int)obj == 1);
+                var waiter2 = Synchronizable.SystemWideEventWait(Key.Get(curMeth, "Bar"), obj => (int)obj == 2);
                 using (var sync = waiter1.Then(waiter2.Pause(TimeSpan.FromMilliseconds(1000))).GetSynchronizer())
                     action(sync);
             }
@@ -339,33 +343,92 @@ namespace Test.Urasandesu.Enkidu
             Synchronize(sync =>
             {
                 var task1 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((task1EndTime_Assign_, processes_Add_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((task1EndTime_Assign_) =>
                 Synchronize(sync_ =>
                 {
                     sync_.Begin(1).Wait();
                     task1EndTime_Assign_.Invoke(DateTimeOffset.Now);
-                    processes_Add_.Invoke(1);
                     sync_.End(1).Wait();
-                }), task1EndTime_Assign, processes_Add));
+                }), task1EndTime_Assign));
 
                 var task2 = Task.Run(() =>
-                AppDomain.CurrentDomain.RunAtIsolatedDomain((task2StartTime_Assign_, processes_Add_) =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((task2BegunTime_Assign_) =>
                 Synchronize(sync_ =>
                 {
                     sync_.Begin(2).Wait();
-                    task2StartTime_Assign_.Invoke(DateTimeOffset.Now);
-                    processes_Add_.Invoke(2);
+                    task2BegunTime_Assign_.Invoke(DateTimeOffset.Now);
                     sync_.End(2).Wait();
-                }), task2StartTime_Assign, processes_Add));
+                }), task2BegunTime_Assign));
 
                 sync.NotifyAll(false).Wait();
 
 
                 // Assert
-                CollectionAssert.AreEqual(new[] { 1, 2 }, processes);
-                Assert.GreaterOrEqual(task2StartTime - task1EndTime, TimeSpan.FromMilliseconds(1000));
+                Assert.GreaterOrEqual(task2BegunTime - task1EndTime, TimeSpan.FromMilliseconds(1000));
                 Task.WaitAll(task1, task2);
             });
+        }
+
+        [Test]
+        public void Can_delay_apps_by_the_passed_time_span()
+        {
+            // Arrange
+            var task1BeginTime = default(DateTimeOffset);
+            var task1BeginTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task1BeginTime = dt);
+            var task2BegunTime = default(DateTimeOffset);
+            var task2BegunTime_Assign = new MarshalByRefAction<DateTimeOffset>(dt => task2BegunTime = dt);
+            void Synchronize(Action<ISynchronizer> action)
+            {
+                var curMeth = MethodBase.GetCurrentMethod();
+                var setter1 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Foo"), obj => (int)obj == 1);
+                var setter2 = Synchronizable.SystemWideEventSet(Key.Get(curMeth, "Bar"), obj => (int)obj == 2);
+                using (var sync = setter1.And(setter2.Delay(TimeSpan.FromMilliseconds(1000))).GetSynchronizer())
+                    action(sync);
+            }
+
+
+            // Act
+            Synchronize(sync =>
+            {
+                var mre1 = new ST::ManualResetEvent(false);
+                var task1 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((task1BeginTime_Assign_, mre1_) =>
+                Synchronize(sync_ =>
+                {
+                    task1BeginTime_Assign_.Invoke(DateTimeOffset.Now);
+                    sync_.Begin(1).Wait();
+                    mre1_.Set();
+                    sync_.End(1).Wait();
+                }), task1BeginTime_Assign, mre1));
+
+                var mre2 = new ST::ManualResetEvent(false);
+                var task2 = Task.Run(() =>
+                AppDomain.CurrentDomain.RunAtIsolatedDomain((task2BegunTime_Assign_, mre2_) =>
+                Synchronize(sync_ =>
+                {
+                    sync_.Begin(2).Wait();
+                    task2BegunTime_Assign_.Invoke(DateTimeOffset.Now);
+                    mre2_.Set();
+                    sync_.End(2).Wait();
+                }), task2BegunTime_Assign, mre2));
+
+                sync.NotifyAll(false).Wait();
+
+
+                // Assert
+                ST::WaitHandle.WaitAll(new[] { mre1, mre2 });
+                Assert.GreaterOrEqual(task2BegunTime - task1BeginTime, TimeSpan.FromMilliseconds(1000));
+                Task.WaitAll(task1, task2);
+            });
+        }
+
+
+        static class Key
+        {
+            public static string Get(MethodBase currentMethod, object key)
+            {
+                return currentMethod.ToString().GetHashCode().ToString("X8") + "_" + key;
+            }
         }
     }
 }
