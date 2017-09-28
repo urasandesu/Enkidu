@@ -42,8 +42,8 @@ namespace Urasandesu.Enkidu
             RightSynchronizer = rhs ?? throw new ArgumentNullException(nameof(rhs));
         }
 
-        protected ISynchronizer LeftSynchronizer { get; private set; }
-        protected ISynchronizer RightSynchronizer { get; private set; }
+        protected ISynchronizer LeftSynchronizer { get; }
+        protected ISynchronizer RightSynchronizer { get; }
 
         public abstract bool WillBegin(object obj, SynchronousOptions opts = null);
 

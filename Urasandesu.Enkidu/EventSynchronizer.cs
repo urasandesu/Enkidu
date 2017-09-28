@@ -57,7 +57,7 @@ namespace Urasandesu.Enkidu
             m_allNotified = allNotified;
         }
 
-        public SynchronousId Id { get; private set; }
+        public SynchronousId Id { get; }
         protected ManualResetEventSlim WaitHandle { get; } = new ManualResetEventSlim(false);
         protected Predicate<object> WillHandle { get; }
 

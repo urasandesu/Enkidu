@@ -41,7 +41,7 @@ namespace Urasandesu.Enkidu
             OperandSynchronizer = operand ?? throw new ArgumentNullException(nameof(operand));
         }
 
-        protected ISynchronizer OperandSynchronizer { get; private set; }
+        protected ISynchronizer OperandSynchronizer { get; }
 
         public abstract bool WillBegin(object obj, SynchronousOptions opts = null);
 
