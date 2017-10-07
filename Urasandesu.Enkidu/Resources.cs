@@ -1,5 +1,5 @@
 ﻿/* 
- * File: Synchronizable.cs
+ * File: Resources.cs
  * 
  * Author: Akira Sugiura (urasandesu@gmail.com)
  * 
@@ -36,7 +36,7 @@ namespace Urasandesu.Enkidu
 {
     class Resources
     {
-        static ResourceManager m_resourceManager;
+        static ResourceManager ms_resourceManager;
 
         public Resources()
         { }
@@ -45,9 +45,9 @@ namespace Urasandesu.Enkidu
         {
             get
             {
-                if (ReferenceEquals(m_resourceManager, null))
-                    m_resourceManager = new ResourceManager("Urasandesu.Enkidu.Resources", typeof(Resources).Assembly);
-                return m_resourceManager;
+                if (ReferenceEquals(ms_resourceManager, null))
+                    ms_resourceManager = new ResourceManager("Urasandesu.Enkidu.Resources", typeof(Resources).Assembly);
+                return ms_resourceManager;
             }
         }
 
