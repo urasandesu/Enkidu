@@ -39,49 +39,49 @@
       <HintPath>..\packages\Castle.Core.4.1.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Build.Framework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.Build.Framework.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.Build.Framework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CodeAnalysis.CSharp.DataFlowAnalysis, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.CSharp.DataFlowAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp.DataFlowAnalysis, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.CSharp.DataFlowAnalysis.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp.Workspaces, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.CSharp.Workspaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.VisualBasic, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.VisualBasic.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.VisualBasic.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.VisualBasic.Workspaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.Workspaces, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.Workspaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.Workspaces.Desktop, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.CodeAnalysis.Workspaces.Desktop.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.PSharp, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.PSharp.dll</HintPath>
+    <Reference Include="Microsoft.PSharp, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.PSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.PSharp.LanguageServices, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.PSharp.LanguageServices.dll</HintPath>
+    <Reference Include="Microsoft.PSharp.LanguageServices, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.PSharp.LanguageServices.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.PSharp.SharedObjects, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.PSharp.SharedObjects.dll</HintPath>
+    <Reference Include="Microsoft.PSharp.SharedObjects, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.PSharp.SharedObjects.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.PSharp.StaticAnalysis, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.PSharp.StaticAnalysis.dll</HintPath>
+    <Reference Include="Microsoft.PSharp.StaticAnalysis, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.PSharp.StaticAnalysis.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.PSharp.TestingServices, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.PSharp.TestingServices.dll</HintPath>
+    <Reference Include="Microsoft.PSharp.TestingServices, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.PSharp.TestingServices.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.PSharp.TestingServices.SchedulingStrategies, Version=1.3.2.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\Microsoft.PSharp.TestingServices.SchedulingStrategies.dll</HintPath>
+    <Reference Include="Microsoft.PSharp.TestingServices.SchedulingStrategies, Version=1.3.4.0, Culture=neutral, PublicKeyToken=c4566cf0a7f74012, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\Microsoft.PSharp.TestingServices.SchedulingStrategies.dll</HintPath>
     </Reference>
     <Reference Include="Moq, Version=4.7.99.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
       <HintPath>..\packages\Moq.4.7.99\lib\net45\Moq.dll</HintPath>
@@ -91,26 +91,26 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Collections.Immutable.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Collections.Immutable.dll</HintPath>
     </Reference>
     <Reference Include="System.Composition.AttributedModel, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Composition.AttributedModel.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Composition.AttributedModel.dll</HintPath>
     </Reference>
     <Reference Include="System.Composition.Convention, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Composition.Convention.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Composition.Convention.dll</HintPath>
     </Reference>
     <Reference Include="System.Composition.Hosting, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Composition.Hosting.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Composition.Hosting.dll</HintPath>
     </Reference>
     <Reference Include="System.Composition.Runtime, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Composition.Runtime.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Composition.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="System.Composition.TypedParts, Version=1.0.27.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Composition.TypedParts.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Composition.TypedParts.dll</HintPath>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.PSharp.1.3.3\lib\net46\System.Reflection.Metadata.dll</HintPath>
+      <HintPath>..\..\packages\Microsoft.PSharp.1.3.4\lib\net46\System.Reflection.Metadata.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
